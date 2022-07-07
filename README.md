@@ -111,17 +111,45 @@ WHERE employees.emp_no IN (
 
 We need a table with employees, who are working for us at this moment: first and last name, date of birth, gender, hire_date, title and salary.
 
+  SELECT employees.first_name, employees.last_name, employees.birth_date, employees.gender, employees.hire_date, titles.title, salaries.salary
+  FROM `employees` 
+  INNER JOIN `titles` ON titles.emp_no = employees.emp_no
+  INNER JOIN `salaries` ON salaries.emp_no = employees.emp_no
+  WHERE salaries.to_date >= CURRENT_DATE;
 
+  > 371243
 
 10. Report:
 
 We need a table with managers, who are working for us at this moment: first and last name, date of birth, gender, hire_date, title, department name and salary.
 
+  SELECT DISTINCT employees.first_name, employees.last_name, employees.birth_date, employees.gender, employees.hire_date, titles.title, departments.dept_name, salaries.salary
+  FROM `employees` 
+  INNER JOIN `titles` ON titles.emp_no = employees.emp_no
+  INNER JOIN `salaries` ON salaries.emp_no = employees.emp_no 
+  INNER JOIN `dept_manager` ON dept_manager.emp_no = employees.emp_no
+  INNER JOIN `departments` ON departments.dept_no = dept_manager.dept_no
+  WHERE salaries.to_date >= CURRENT_DATE
+  AND titles.title = "Manager";
+
+  > 24 
 
 
 Bonus query:
 
 Create a query that will join all tables and show all data from all tables.
+
+  SELECT employees.emp_no, employees.first_name, employees.last_name, employees.birth_date, employees.gender, employees.hire_date, titles.title, departments.dept_name, departments.dept_no, salaries.salary
+  FROM `employees` 
+  INNER JOIN `titles` ON titles.emp_no = employees.emp_no
+  INNER JOIN `salaries` ON salaries.emp_no = employees.emp_no 
+  INNER JOIN `dept_manager` ON dept_manager.emp_no = employees.emp_no
+  INNER JOIN `departments` ON departments.dept_no = dept_manager.dept_no
+  INNER JOIN `dept_emp` ON dept_emp.emp_no = dept_emp.emp_no
+  WHERE salaries.to_date >= CURRENT_DATE  
+  ORDER BY `employees`.`emp_no` ASC
+
+  > 17.906.562 
 
 
 
